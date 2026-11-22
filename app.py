@@ -736,3 +736,18 @@ import features  # noqa: E402,F401
 import website   # noqa: E402,F401  (site colours + gallery)
 import contracts  # noqa: E402,F401  (employment contracts)
 import business # noqa: E402,F401 (sales, expenses, admins, letterheaded docs)
+import vacancies  # noqa: E402,F401  (job vacancies and applications)
+
+# ---- FORCE DEFAULTS ON BOOT (temporary) ------------------------------------
+# Run once to overwrite any stale values. Remove after the next deploy.
+with app.app_context():
+    try:
+        db = get_db()
+        db.execute("UPDATE app_settings SET value=? WHERE key='brand_name'", ("Codename BlackSheep",))
+        db.execute("UPDATE app_settings SET value=? WHERE key='body_color'", ("#ffffff",))
+        db.execute("UPDATE app_settings SET value=? WHERE key='navbar_color'", ("#000000",))
+        db.execute("UPDATE app_settings SET value=? WHERE key='navbar_text_color'", ("#ffffff",))
+        db.commit()
+        print("FORCE DEFAULTS: applied")
+    except Exception as e:
+        print(f"FORCE DEFAULTS: skipped ({e})")
